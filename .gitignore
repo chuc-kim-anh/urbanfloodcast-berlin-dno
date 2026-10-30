@@ -4,5 +4,6 @@ __pycache__/
 *.py[cod]
 data/
 models/*.pt
+!models/berlin_ii_dno.pt
 results/
 UrbanFloodCast_Dataset.zip

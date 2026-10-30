@@ -48,7 +48,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--data", default="data/converted")
     p.add_argument("--output", default="models/berlin_ii_dno.pt")
-    p.add_argument("--repo", default="../../work/UrbanFloodCast")
+    p.add_argument("--repo", default="vendor/UrbanFloodCast")
     p.add_argument("--epochs", type=int, default=12)
     p.add_argument("--downsample", type=int, default=4)
     p.add_argument("--learning-rate", type=float, default=1e-4)

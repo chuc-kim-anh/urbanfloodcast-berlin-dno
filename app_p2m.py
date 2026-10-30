@@ -135,7 +135,7 @@ st.caption("UrbanFloodCast DNO · dự báo độ sâu ngập từ forcing mưa,
 
 with st.sidebar:
     st.header("Thiết lập dữ liệu")
-    code_root = Path(os.getenv("URBANFLOODCAST_CODE", "../../work/UrbanFloodCast/DNO")).resolve()
+    code_root = Path(os.getenv("URBANFLOODCAST_CODE", "vendor/UrbanFloodCast/DNO")).resolve()
     if code_root.name == "DNO":
         code_repo_root = code_root.parent
     else:
