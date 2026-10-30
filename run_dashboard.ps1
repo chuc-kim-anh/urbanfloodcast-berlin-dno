@@ -10,9 +10,15 @@ if (-not (Test-Path -LiteralPath $python)) {
 if ($LASTEXITCODE -ne 0) {
     throw 'Required Python packages are missing. Follow the README setup steps first.'
 }
-if (-not (Test-Path -LiteralPath 'vendor\UrbanFloodCast\DNO\models\DNO.py')) {
+$vendorDno = Join-Path $projectRoot 'vendor\UrbanFloodCast\DNO'
+$workspaceDno = Join-Path $projectRoot '..\..\work\UrbanFloodCast\DNO'
+if (Test-Path -LiteralPath (Join-Path $vendorDno 'models\DNO.py')) {
+    $dnoPath = $vendorDno
+} elseif (Test-Path -LiteralPath (Join-Path $workspaceDno 'models\DNO.py')) {
+    $dnoPath = (Resolve-Path -LiteralPath $workspaceDno).Path
+} else {
     throw 'Upstream DNO code not found. Run setup_project.ps1 first.'
 }
 
-$env:URBANFLOODCAST_CODE = Join-Path $projectRoot 'vendor\UrbanFloodCast\DNO'
+$env:URBANFLOODCAST_CODE = $dnoPath
 & $python -m streamlit run app_p2m.py --server.address 127.0.0.1 --server.port 8504
