@@ -1,0 +1,8 @@
+.venv/
+.runtime_packages/
+__pycache__/
+*.py[cod]
+data/
+models/*.pt
+results/
+UrbanFloodCast_Dataset.zip
