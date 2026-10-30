@@ -86,7 +86,7 @@ def depth_rgba(depth: np.ndarray) -> np.ndarray:
     return rgba
 
 
-def render_satellite_map(depth: np.ndarray, selected_minute: int, event_name: str, layer_label: str):
+def render_satellite_map(depth: np.ndarray, layer_label: str):
     import folium
 
     bounds, center = get_satellite_bounds()
@@ -106,17 +106,6 @@ def render_satellite_map(depth: np.ndarray, selected_minute: int, event_name: st
         interactive=True, cross_origin=False, zindex=10, show=True,
     ).add_to(fmap)
     folium.LayerControl(collapsed=False).add_to(fmap)
-    legend = f"""
-    <div style="position:fixed;bottom:24px;left:24px;z-index:9999;background:rgba(12,22,35,.94);
-                color:#fff;padding:12px 14px;border:1px solid #63758b;border-radius:8px;
-                font:13px/1.6 Arial,sans-serif;box-shadow:0 2px 8px #0008">
-      <b>{layer_label} · phút {selected_minute}</b><br>
-      <span style="color:#00be6e">■</span> Mức 1 · 2–&lt;20 cm<br>
-      <span style="color:#ffbe00">■</span> Mức 2 · 20–40 cm<br>
-      <span style="color:#eb2d37">■</span> Mức 3 · &gt;40 cm<br>
-      <span style="color:#b8c2ce">Ô trong suốt: &lt;2 cm / không ngập<br>và mặt nạ mái nhà</span>
-    </div>"""
-    fmap.get_root().html.add_child(folium.Element(legend))
     return fmap
 
 
@@ -278,7 +267,7 @@ with right:
                     "Benchmark chỉ dùng làm đối chiếu, không phải quan trắc thực địa."
                 )
             try:
-                fmap = render_satellite_map(map_depth, selected_min, event_name, map_layer)
+                fmap = render_satellite_map(map_depth, map_layer)
                 components.html(fmap.get_root().render(), height=650, scrolling=False)
                 st.caption("Ảnh nền Esri chỉ để tham khảo vị trí; ảnh không phải đầu vào của mô hình. Lớp ngập dùng ba màu theo độ sâu; vùng khô và mái nhà để trong suốt. Benchmark tham chiếu là mô phỏng thủy lực, không phải quan trắc thực địa.")
             except Exception as exc:
