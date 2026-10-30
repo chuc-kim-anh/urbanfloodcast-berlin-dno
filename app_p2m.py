@@ -257,6 +257,15 @@ with right:
         with tab1:
             map_layer = "DNO dự báo"
             map_depth = masked_pred
+            if paired:
+                map_layer = st.radio(
+                    "Lớp hiển thị trên ảnh vệ tinh",
+                    ["DNO dự báo", "Benchmark mô phỏng tham chiếu"],
+                    horizontal=True,
+                    key="satellite_overlay_choice",
+                )
+                if map_layer == "Benchmark mô phỏng tham chiếu":
+                    map_depth = np.where(valid2, ref_map, np.nan)
             st.caption(f"Ảnh nền vệ tinh · {map_layer} · phút {selected_min} · {event_name}")
             pred_med_pct = 100 * np.count_nonzero(valid2 & (pred_map >= 0.20) & (pred_map <= 0.40)) / max(np.count_nonzero(valid2), 1)
             pred_high_pct = 100 * np.count_nonzero(valid2 & (pred_map > 0.40)) / max(np.count_nonzero(valid2), 1)
@@ -271,7 +280,7 @@ with right:
             try:
                 fmap = render_satellite_map(map_depth, selected_min, event_name, map_layer)
                 components.html(fmap.get_root().render(), height=650, scrolling=False)
-                st.caption("Ảnh nền Esri chỉ để tham khảo vị trí; ảnh không phải đầu vào của mô hình. Lớp DNO dự báo dùng ba màu theo độ sâu; vùng khô và mái nhà để trong suốt.")
+                st.caption("Ảnh nền Esri chỉ để tham khảo vị trí; ảnh không phải đầu vào của mô hình. Lớp ngập dùng ba màu theo độ sâu; vùng khô và mái nhà để trong suốt. Benchmark tham chiếu là mô phỏng thủy lực, không phải quan trắc thực địa.")
             except Exception as exc:
                 st.warning(f"Không dựng được bản đồ vệ tinh: {exc}. Các bản đồ raster bên dưới vẫn dùng được.")
                 st.plotly_chart(heatmap(masked_pred, f"Độ sâu dự báo · t = {selected_min} phút", "Turbo", 0), use_container_width=True, key="satellite_fallback_depth")
